@@ -13,25 +13,21 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 
-public class User extends BaseEntity{
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class User extends BaseEntity {
 
     @Column(nullable = false)
-    private String fullName;
+    private String name;
+
 
     @Column(nullable = false, unique = true)
     private String email;
 
+
     @Column(nullable = false)
     private String password;
 
+
     @Enumerated(EnumType.STRING)
-    private Role role;
-
-    @OneToMany(mappedBy = "user")
-    private List<Favorite> favorites;
-
+    @Column(nullable = false)
+    private Role role = Role.USER;
 }
