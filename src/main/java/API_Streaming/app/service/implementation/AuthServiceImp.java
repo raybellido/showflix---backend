@@ -1,5 +1,4 @@
 package API_Streaming.app.service.implementation;
-
 import API_Streaming.app.dto.request.LoginRequest;
 import API_Streaming.app.dto.request.RegisterRequest;
 import API_Streaming.app.dto.response.AuthResponse;
@@ -19,11 +18,8 @@ import org.springframework.stereotype.Service;
 public class AuthServiceImp implements AuthService {
 
     private final UserRepository userRepository;
-
     private final PasswordEncoder passwordEncoder;
-
     private final JwtService jwtService;
-
     private final AuthenticationManager authenticationManager;
 
 
@@ -32,12 +28,14 @@ public class AuthServiceImp implements AuthService {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("El email ya está registrado");
         }
-        User user = User.builder().name(request.getName()).email(request.getEmail()).password(passwordEncoder.encode(request.getPassword())).role(Role.ROLE_USER).build();
+        User user = User.builder()
+                .name(request.getName())
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .role(Role.ROLE_USER).build();
 
         User savedUser = userRepository.save(user);
-
         String token = jwtService.generateToken(savedUser);
-
         return AuthResponse.builder().token(token).name(savedUser.getName()).email(savedUser.getEmail()).role(savedUser.getRole()).build();
     }
 

@@ -52,41 +52,22 @@ public class MovieServiceImp implements MovieService {
 
     @Override
     public MovieResponse update(Long id, MovieRequest request) {
-
-
         Movie movie = getMovie(id);
-
-
         Genre genre = getGenre(request.getGenreId());
-
-
         movieMapper.updateEntity(movie, request, genre);
-
-
         Movie updatedMovie = movieRepository.save(movie);
-
-
         return movieMapper.toResponse(updatedMovie);
-
     }
 
     @Override
     public void delete(Long id) {
-
-
         Movie movie = getMovie(id);
-
-
         movie.setStatus(Status.INACTIVE);
-
-
         movieRepository.save(movie);
-
     }
 
     private Genre getGenre(Long genreId) {
         return genreRepository.findById(genreId).orElseThrow(() -> new ResourceNotFoundException("Género no encontrado."));
-
     }
 
     private Movie getMovie(Long id) {
@@ -94,9 +75,7 @@ public class MovieServiceImp implements MovieService {
     }
 
     private void validateMovie(MovieRequest request) {
-
         if (movieRepository.existsByTitle(request.getTitle())) {
-
             throw new BusinessException("Ya existe una película con ese título.");
 
         }

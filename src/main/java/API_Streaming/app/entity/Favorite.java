@@ -4,7 +4,10 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "favorites")
+@Table(name = "favorites", uniqueConstraints =
+        {@UniqueConstraint(columnNames = {"user_id", "movie_id"})
+        }
+)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -12,14 +15,12 @@ import lombok.*;
 @Builder
 public class Favorite extends BaseEntity {
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id",nullable = false)
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "movie_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "movie_id",nullable = false)
     private Movie movie;
 
-    @Column(nullable = false)
-    private Boolean active = true;
 }
