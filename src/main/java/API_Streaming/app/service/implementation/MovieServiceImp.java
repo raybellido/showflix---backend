@@ -12,6 +12,8 @@ import API_Streaming.app.repository.GenreRepository;
 import API_Streaming.app.repository.MovieRepository;
 import API_Streaming.app.service.interfaces.MovieService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,8 +29,8 @@ public class MovieServiceImp implements MovieService {
 
 
     @Override
-    public List<MovieResponse> findAll() {
-        return movieRepository.findByStatus(Status.ACTIVE).stream().map(movieMapper::toResponse).toList();
+    public Page<MovieResponse> findAll(Pageable pageable) {
+        return movieRepository.findByStatus(Status.ACTIVE, pageable).map(movieMapper::toResponse);
     }
 
     @Override
@@ -40,13 +42,9 @@ public class MovieServiceImp implements MovieService {
     public MovieResponse create(MovieRequest request) {
 
         validateMovie(request);
-
         Genre genre = getGenre(request.getGenreId());
-
         Movie movie = movieMapper.toEntity(request, genre);
-
         Movie savedMovie = movieRepository.save(movie);
-
         return movieMapper.toResponse(savedMovie);
     }
 
@@ -66,20 +64,36 @@ public class MovieServiceImp implements MovieService {
         movieRepository.save(movie);
     }
 
+
     private Genre getGenre(Long genreId) {
         return genreRepository.findById(genreId).orElseThrow(() -> new ResourceNotFoundException("Género no encontrado."));
     }
 
     private Movie getMovie(Long id) {
-        return movieRepository.findByIdAndStatus(id,Status.ACTIVE).orElseThrow(() -> new ResourceNotFoundException("Pelicula no encontrada"));
+        return movieRepository.findByIdAndStatus(id, Status.ACTIVE).orElseThrow(() -> new ResourceNotFoundException("Pelicula no encontrada"));
     }
 
     private void validateMovie(MovieRequest request) {
         if (movieRepository.existsByTitle(request.getTitle())) {
             throw new BusinessException("Ya existe una película con ese título.");
-
         }
+    }
 
+    @Override
+    public Page<MovieResponse> searchByTitle(String title, Pageable pageable) {
+        return movieRepository.findByTitleContainingIgnoreCase(title, pageable).map(movieMapper::toResponse);
+
+
+    }
+
+    @Override
+    public Page<MovieResponse> findByGenre(Long genreId, Pageable pageable) {
+        return movieRepository.findByGenreIdAndStatus(genreId, Status.ACTIVE, pageable).map(movieMapper::toResponse);
+    }
+
+    @Override
+    public Page<MovieResponse> searchByTitleAndGenre(String title, Long genreId, Pageable pageable) {
+        return movieRepository.findByTitleContainingIgnoreCaseAndGenreIdAndStatus(title, genreId, Status.ACTIVE, pageable).map(movieMapper::toResponse);
     }
 
 

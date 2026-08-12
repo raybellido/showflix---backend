@@ -14,4 +14,6 @@ public interface FavoriteService {
 
     List<MovieResponse> getMyFavorites();
 
+    boolean isFavorite(Long movieId);
+
 }

@@ -6,6 +6,8 @@ import API_Streaming.app.service.interfaces.MovieService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,8 +23,18 @@ public class MovieController {
     private final MovieService movieService;
 
     @GetMapping
-    public List<MovieResponse> findAll() {
-        return movieService.findAll();
+    public Page<MovieResponse> getMovies(@RequestParam(required = false) String title, @RequestParam(required = false) Long genreId, Pageable pageable) {
+
+        boolean hasTitle = title != null && !title.isBlank();
+        boolean hasGenre = genreId != null;
+
+        if (hasTitle && hasGenre) {return movieService.searchByTitleAndGenre(title, genreId, pageable);}
+
+        if (hasTitle) {return movieService.searchByTitle(title, pageable);}
+
+        if (hasGenre) {return movieService.findByGenre(genreId, pageable);}
+
+        return movieService.findAll(pageable);
     }
 
     @GetMapping("/{id}")

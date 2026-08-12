@@ -36,4 +36,11 @@ public class FavoriteController {
         return ResponseEntity.ok(favoriteService.getMyFavorites());
     }
 
+    @GetMapping("/check/{movieId}")
+    public ResponseEntity<Boolean> checkFavorite(@PathVariable Long movieId) {
+        return ResponseEntity.ok(favoriteService.isFavorite(movieId));
+
+    }
+
+
 }

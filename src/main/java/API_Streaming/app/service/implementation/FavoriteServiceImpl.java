@@ -79,4 +79,16 @@ public class FavoriteServiceImpl implements FavoriteService {
 
         return userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
     }
+
+    @Override
+    public boolean isFavorite(Long movieId) {
+
+        User user = getAuthenticatedUser();
+
+        return favoriteRepository
+                .existsByUserIdAndMovieId(
+                        user.getId(),
+                        movieId
+                );
+    }
 }
