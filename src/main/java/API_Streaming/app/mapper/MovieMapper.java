@@ -1,6 +1,7 @@
 package API_Streaming.app.mapper;
 
 import API_Streaming.app.dto.request.MovieRequest;
+import API_Streaming.app.dto.request.MovieUpdateRequest;
 import API_Streaming.app.dto.response.MovieResponse;
 import API_Streaming.app.entity.Genre;
 import API_Streaming.app.entity.Movie;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MovieMapper {
 
-    public  MovieResponse toResponse(Movie movie){
+    public MovieResponse toResponse(Movie movie) {
 
         return MovieResponse.builder()
 
@@ -29,16 +30,12 @@ public class MovieMapper {
 
                 .rating(movie.getRating())
 
-                .genre(
-                        movie.getGenre() != null
-                                ? movie.getGenre().getName()
-                                : null
-                )
+                .genre(movie.getGenre() != null ? movie.getGenre().getName() : null)
 
                 .build();
     }
 
-    public Movie toEntity(MovieRequest request, Genre genre){
+    public Movie toEntity(MovieRequest request, Genre genre) {
 
         return Movie.builder()
 
@@ -62,29 +59,14 @@ public class MovieMapper {
 
     }
 
-    public void updateEntity(Movie movie,
-                             MovieRequest request,
-                             Genre genre) {
+    public void updateEntity(Movie movie, MovieUpdateRequest request, Genre genre) {
 
+        movie.setTitle(request.title());
 
-        movie.setTitle(request.getTitle());
-
-        movie.setDescription(request.getDescription());
-
-        movie.setDuration(request.getDuration());
-
-        movie.setReleaseYear(request.getReleaseYear());
-
-        movie.setImageUrl(request.getImageUrl());
-
-        movie.setTrailerUrl(request.getTrailerUrl());
-
-        movie.setVideoUrl(request.getVideoUrl());
+        movie.setDescription(request.description());
 
         movie.setGenre(genre);
-
     }
-
 
 
 }

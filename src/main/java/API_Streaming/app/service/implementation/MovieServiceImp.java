@@ -1,6 +1,7 @@
 package API_Streaming.app.service.implementation;
 
 import API_Streaming.app.dto.request.MovieRequest;
+import API_Streaming.app.dto.request.MovieUpdateRequest;
 import API_Streaming.app.dto.response.MovieResponse;
 import API_Streaming.app.entity.Genre;
 import API_Streaming.app.entity.Movie;
@@ -49,9 +50,9 @@ public class MovieServiceImp implements MovieService {
     }
 
     @Override
-    public MovieResponse update(Long id, MovieRequest request) {
+    public MovieResponse update(Long id, MovieUpdateRequest request) {
         Movie movie = getMovie(id);
-        Genre genre = getGenre(request.getGenreId());
+        Genre genre = getGenre(request.genreId());
         movieMapper.updateEntity(movie, request, genre);
         Movie updatedMovie = movieRepository.save(movie);
         return movieMapper.toResponse(updatedMovie);

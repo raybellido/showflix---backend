@@ -1,6 +1,7 @@
 package API_Streaming.app.service.interfaces;
 
 import API_Streaming.app.dto.request.MovieRequest;
+import API_Streaming.app.dto.request.MovieUpdateRequest;
 import API_Streaming.app.dto.response.MovieResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +16,7 @@ public interface MovieService {
 
     MovieResponse create(MovieRequest request);
 
-    MovieResponse update(Long id, MovieRequest request);
+    MovieResponse update(Long id, MovieUpdateRequest request);
 
     void delete(Long id);
 

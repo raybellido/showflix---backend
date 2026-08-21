@@ -1,6 +1,7 @@
 package API_Streaming.app.controller;
 
 import API_Streaming.app.dto.request.MovieRequest;
+import API_Streaming.app.dto.request.MovieUpdateRequest;
 import API_Streaming.app.dto.response.MovieResponse;
 import API_Streaming.app.service.interfaces.MovieService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -55,7 +56,7 @@ public class MovieController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public MovieResponse update(@Valid @PathVariable Long id, @RequestBody MovieRequest request) {
+    public MovieResponse update(@PathVariable Long id, @Valid @RequestBody MovieUpdateRequest request) {
 
         return movieService.update(id, request);
 
