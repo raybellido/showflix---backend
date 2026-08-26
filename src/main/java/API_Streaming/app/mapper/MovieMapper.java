@@ -32,6 +32,8 @@ public class MovieMapper {
 
                 .genre(movie.getGenre() != null ? movie.getGenre().getName() : null)
 
+                .genreId(movie.getGenre() != null ? movie.getGenre().getId() : null)
+
                 .build();
     }
 

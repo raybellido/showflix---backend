@@ -5,6 +5,7 @@ import API_Streaming.app.dto.request.RegisterRequest;
 import API_Streaming.app.dto.response.AuthResponse;
 import API_Streaming.app.entity.Role;
 import API_Streaming.app.entity.User;
+import API_Streaming.app.exception.BusinessException;
 import API_Streaming.app.repository.UserRepository;
 import API_Streaming.app.service.interfaces.AuthService;
 import API_Streaming.app.service.security.JwtService;
@@ -27,7 +28,7 @@ public class AuthServiceImp implements AuthService {
     @Override
     public AuthResponse register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("El email ya está registrado");
+            throw new BusinessException("El email ya está registrado");
         }
         User user = User.builder().name(request.getName()).email(request.getEmail()).password(passwordEncoder.encode(request.getPassword())).role(Role.ROLE_USER).build();
 

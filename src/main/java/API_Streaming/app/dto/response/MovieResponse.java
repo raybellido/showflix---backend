@@ -28,4 +28,6 @@ public class MovieResponse {
 
     private BigDecimal rating;
 
+    private Long genreId;
+
 }
