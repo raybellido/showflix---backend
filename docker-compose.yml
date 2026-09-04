@@ -1,0 +1,29 @@
+services:
+
+  mysql:
+    image: mysql:8.4
+    container_name: showflix-db
+    environment:
+      MYSQL_DATABASE: showflix
+      MYSQL_ROOT_PASSWORD: 123
+    ports:
+      - "3306:3306"
+    volumes:
+      - showflix-data:/var/lib/mysql
+
+  backend:
+    build: .
+    container_name: showflix-backend
+    depends_on:
+      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/showflix
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 123
+      JWT_SECRET: showflixSecretKey2026SuperSeguroParaJwtTokenAuthentication123456
+      JWT_EXPIRATION: 86400000
+    ports:
+      - "8080:8080"
+
+volumes:
+  showflix-data:
